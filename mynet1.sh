@@ -266,7 +266,7 @@ EOF
 }
 
 # 安装Caddy TLS
-install_caddy_tls() {
+ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_caddy_tls() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-caddy$") ]]; then
     echo_content green "---> 安装Caddy TLS"
 
@@ -620,7 +620,7 @@ EOF
 }
 
 # 安装MariaDB
-install_mariadb() {
+docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_mariadb() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-mariadb$") ]]; then
     echo_content green "---> 安装MariaDB"
 
@@ -678,7 +678,7 @@ install_mariadb() {
 }
 
 # 安装Redis
-install_redis() {
+docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_redis() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-redis$") ]]; then
     echo_content green "---> 安装Redis"
 
@@ -711,7 +711,7 @@ install_redis() {
 }
 
 # 安装TrojanPanel
-install_trojan_panel() {
+docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_panel() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel$") ]]; then
     echo_content green "---> 安装Trojan Panel"
 
@@ -880,7 +880,7 @@ EOF
 }
 
 # 安装Trojan Panel Core
-install_trojan_panel_core() {
+docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_panel_core() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-core$") ]]; then
     echo_content green "---> 安装Trojan Panel Core"
 
@@ -955,7 +955,7 @@ install_trojan_panel_core() {
 }
 
 # 更新Trojan Panel数据结构
-update__trojan_panel_database() {
+ update__trojan_panel_database() {
   echo_content skyBlue "---> 更新Trojan Panel数据结构"
 
   if [[ "${trojan_panel_current_version}" == "v1.3.1" ]]; then
