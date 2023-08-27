@@ -266,7 +266,7 @@ EOF
 }
 
 # 安装Caddy TLS
- docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_caddy_tls() {
+install_caddy_tls() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-caddy$") ]]; then
     echo_content green "---> 安装Caddy TLS"
 
@@ -596,7 +596,7 @@ EOF
     fi
 
     docker pull caddy:2.6.2 &&
-      docker run --network=mynet2 -d --name trojan-panel-caddy --restart always \
+      docker run -d --name trojan-panel-caddy --restart always \
         --network=host \
         -v "${CADDY_Config}":"${CADDY_Config}" \
         -v ${CADDY_CERT}:"${CADDY_CERT_DIR}${domain}/" \
@@ -620,7 +620,7 @@ EOF
 }
 
 # 安装MariaDB
-docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_mariadb() {
+install_mariadb() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-mariadb$") ]]; then
     echo_content green "---> 安装MariaDB"
 
@@ -638,7 +638,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_mariadb(
 
     if [[ "${mariadb_user}" == "root" ]]; then
       docker pull mariadb:10.7.3 &&
-        docker run --network=mynet2 -d --name trojan-panel-mariadb --restart always \
+        docker run -d --name trojan-panel-mariadb --restart always \
           --network=host \
           -e MYSQL_DATABASE="trojan_panel_db" \
           -e MYSQL_ROOT_PASSWORD="${mariadb_pas}" \
@@ -649,7 +649,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_mariadb(
           --collation-server=utf8mb4_unicode_ci
     else
       docker pull mariadb:10.7.3 &&
-        docker run --network=mynet2 -d --name trojan-panel-mariadb --restart always \
+        docker run -d --name trojan-panel-mariadb --restart always \
           --network=host \
           -e MYSQL_DATABASE="trojan_panel_db" \
           -e MYSQL_ROOT_PASSWORD="${mariadb_pas}" \
@@ -678,7 +678,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_mariadb(
 }
 
 # 安装Redis
-docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_redis() {
+install_redis() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-redis$") ]]; then
     echo_content green "---> 安装Redis"
 
@@ -693,7 +693,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_redis() 
     done
 
     docker pull redis:6.2.7 &&
-      docker run --network=mynet2 -d --name trojan-panel-redis --restart always \
+      docker run -d --name trojan-panel-redis --restart always \
         --network=host \
         redis:6.2.7 \
         redis-server --requirepass "${redis_pass}" --port ${redis_port}
@@ -711,7 +711,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_redis() 
 }
 
 # 安装TrojanPanel
-docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_panel() {
+install_trojan_panel() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel$") ]]; then
     echo_content green "---> 安装Trojan Panel"
 
@@ -746,7 +746,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_p
     docker exec trojan-panel-redis redis-cli -h "${redis_host}" -p ${redis_port} -a "${redis_pass}" -e "flushall" &>/dev/null
 
     docker pull jonssonyan/trojan-panel:2.0.5 &&
-      docker run --network=mynet2 -d --name trojan-panel --restart always \
+      docker run -d --name trojan-panel --restart always \
         --network=host \
         -v ${CADDY_SRV}:${TROJAN_PANEL_WEBFILE} \
         -v ${TROJAN_PANEL_LOGS}:${TROJAN_PANEL_LOGS} \
@@ -851,7 +851,7 @@ EOF
     done
 
     docker pull jonssonyan/trojan-panel-ui:2.0.4 &&
-      docker run --network=mynet2 -d --name trojan-panel-ui --restart always \
+      docker run -d --name trojan-panel-ui --restart always \
         --network=host \
         -v "${NGINX_CONFIG}":"/etc/nginx/conf.d/default.conf" \
         -v ${CADDY_CERT}:${CADDY_CERT} \
@@ -880,7 +880,7 @@ EOF
 }
 
 # 安装Trojan Panel Core
-docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_panel_core() {
+install_trojan_panel_core() {
   if [[ -z $(docker ps -a -q -f "name=^trojan-panel-core$") ]]; then
     echo_content green "---> 安装Trojan Panel Core"
 
@@ -919,7 +919,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_p
     domain=$(cat "${DOMAIN_FILE}")
 
     docker pull jonssonyan/trojan-panel-core:2.0.4 &&
-      docker run --network=mynet2 -d --name trojan-panel-core --restart always \
+      docker run -d --name trojan-panel-core --restart always \
         --network=host \
         -v ${TROJAN_PANEL_CORE_DATA}bin/xray/config:${TROJAN_PANEL_CORE_DATA}bin/xray/config \
         -v ${TROJAN_PANEL_CORE_DATA}bin/trojango/config:${TROJAN_PANEL_CORE_DATA}bin/trojango/config \
@@ -955,7 +955,7 @@ docker run -d -p 185.223.77.110:80:80 -p 185.223.77.110:443:443 install_trojan_p
 }
 
 # 更新Trojan Panel数据结构
- update__trojan_panel_database() {
+update__trojan_panel_database() {
   echo_content skyBlue "---> 更新Trojan Panel数据结构"
 
   if [[ "${trojan_panel_current_version}" == "v1.3.1" ]]; then
@@ -1036,7 +1036,7 @@ update_trojan_panel() {
       docker rmi -f jonssonyan/trojan-panel:2.0.5
 
     docker pull jonssonyan/trojan-panel:2.0.5 &&
-      docker run --network=mynet2 -d --name trojan-panel --restart always \
+      docker run -d --name trojan-panel --restart always \
         --network=host \
         -v ${CADDY_SRV}:${TROJAN_PANEL_WEBFILE} \
         -v ${TROJAN_PANEL_LOGS}:${TROJAN_PANEL_LOGS} \
@@ -1061,7 +1061,7 @@ update_trojan_panel() {
       rm -rf ${TROJAN_PANEL_UI_DATA}
 
     docker pull jonssonyan/trojan-panel-ui:2.0.4 &&
-      docker run --network=mynet2 -d --name trojan-panel-ui --restart always \
+      docker run -d --name trojan-panel-ui --restart always \
         --network=host \
         -v "${NGINX_CONFIG}":"/etc/nginx/conf.d/default.conf" \
         -v ${CADDY_CERT}:${CADDY_CERT} \
@@ -1138,7 +1138,7 @@ update_trojan_panel_core() {
     domain=$(cat "${DOMAIN_FILE}")
 
     docker pull jonssonyan/trojan-panel-core:2.0.4 &&
-      docker run --network=mynet2 -d --name trojan-panel-core --restart always \
+      docker run -d --name trojan-panel-core --restart always \
         --network=host \
         -v ${TROJAN_PANEL_CORE_DATA}bin/xray/config:${TROJAN_PANEL_CORE_DATA}bin/xray/config \
         -v ${TROJAN_PANEL_CORE_DATA}bin/trojango/config:${TROJAN_PANEL_CORE_DATA}bin/trojango/config \
